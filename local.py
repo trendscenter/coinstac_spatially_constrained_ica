@@ -4,13 +4,19 @@ from BackRecon import BackRecon
 from ancillary import list_recursive
 
 
-def local_noop(args):
+def scica_local_1(args):
 
-    output_dict = {}
+    recon = BackRecon()
+    recon.inputs.files = args["input"]["file_names"]
+    recon.inputs.mask = args["input"]["mask"]
+    recon.inputs.ica_sig = args["input"]["ica_sig"]
+    recon.inputs.ica_varname = args["input"]["ica_varname"]
+    recon.inputs.preproc_type = args["input"]["preproc_type"]
+    recon.inputs.algorithm = args["input"]["algorithm"]
+    out = recon.run()
+    output_dict = {'output_files': [], 'computation_phase': 'scica_local_1'}
     cache_dict = {}
-    computation_output = {"output": output_dict,
-                          "cache": cache_dict,
-                          "success": True}
+    computation_output = {"output": output_dict, "cache": cache_dict, "success": True}
 
     return json.dumps(computation_output)
 
