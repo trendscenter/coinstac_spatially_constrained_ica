@@ -2,20 +2,16 @@ import os
 from nipype.interfaces.base import File, traits
 from nipype.interfaces.matlab import MatlabCommand, MatlabInputSpec
 
-ALGORITHM_FILES = dict(
-    gigica="icatb_gigicar",
-    dualregress="icatb_dualregress"
-)
-PREPROC_TYPES = dict(
-    time_mean=1,
-    voxel_mean=2,
-    intensity_norm=3,
-    variance_norm=4
-)
+ALGORITHM_FILES = dict(gigica="icatb_gigicar", dualregress="icatb_dualregress")
+PREPROC_TYPES = dict(time_mean=1,
+                     voxel_mean=2,
+                     intensity_norm=3,
+                     variance_norm=4)
 DEFAULT_PREPROC = "time_mean"
 DEFAULT_ALGORITHM = "gigica"
 DEFAULT_ICA_SIG = "ica_sig.mat"
 DEFAULT_ICA_VARNAME = "SM"
+DEFAULT_MASK = ''
 
 
 class BackReconInputSpec(MatlabInputSpec):
@@ -77,12 +73,9 @@ class BackRecon(MatlabCommand):
                 [TC, SM] = %s(nii.img, ica_sig);
                 save([files{i} '.gica.mat'],'TC','SM')
             end
-        """ % (self.inputs.ica_sig,
-               self.inputs.ica_varname,
-               files_line,
+        """ % (self.inputs.ica_sig, self.inputs.ica_varname, files_line,
                PREPROC_TYPES.get(self.inputs.preproc_type, 1),
-               ALGORITHM_FILES.get(self.inputs.algorithm, "icatb_gigicar")
-               )
+               ALGORITHM_FILES.get(self.inputs.algorithm, "icatb_gigicar"))
         print("MATLAB SCRIPT IS %s" % script)
         return script
 
