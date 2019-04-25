@@ -1,28 +1,43 @@
 import sys
 import ujson as json
-from .BackRecon import BackRecon
+from .BackRecon import gift_gica
 from utils import listRecursive
+import utils as ut
+import os
 
 
 def scica_local_1(args):
-
-    recon = BackRecon()
-    recon.inputs.files = args["input"]["file_names"]
-    recon.inputs.mask = args["input"]["mask"]
-    recon.inputs.ica_sig = args["input"]["ica_sig"]
-    recon.inputs.ica_varname = args["input"]["ica_varname"]
-    recon.inputs.preproc_type = args["input"]["preproc_type"]
-    recon.inputs.algorithm = args["input"]["algorithm"]
-    out = recon.run()
-    output_dict = {'output_files': [], 'computation_phase': 'scica_local_1'}
+    state = args["state"]
+    in_files = ut.read_file_list_csv(
+        os.path.join(state["baseDirectory"], args["input"]["datafile"][0]),
+        state["baseDirectory"],
+        state["clientId"]
+    )
+    maskfile = os.path.join(state["baseDirectory"], args["input"]["mask"][0])
+    template = os.path.join(
+        state["baseDirectory"], args["input"]["scica_template"][0])
+    ut.log("Existence of files %s, mask %s, template %s, output %s" % (
+        [str((f, os.path.exists(f))) for f in in_files],
+        str((maskfile, os.path.exists(maskfile))),
+        str((template, os.path.exists(template))),
+        str((state["outputDirectory"], os.path.exists(state["outputDirectory"])))
+    ), state)
+    output = gift_gica(
+        in_files=in_files,
+        refFiles=[template],
+        mask=maskfile,
+        out_dir=state["outputDirectory"],
+    )
+    output_dict = {
+        'computation_phase': 'scica_local_1'}
     cache_dict = {}
     computation_output = {
         "output": output_dict,
         "cache": cache_dict,
-        "success": True
+        "state": state
     }
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 if __name__ == '__main__':
