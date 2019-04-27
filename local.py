@@ -4,6 +4,7 @@ from .BackRecon import gift_gica
 from utils import listRecursive
 import utils as ut
 import os
+import glob
 
 
 def scica_local_1(args):
@@ -28,8 +29,21 @@ def scica_local_1(args):
         mask=maskfile,
         out_dir=state["outputDirectory"],
     )
+
+    subject_sms = list(glob.glob(os.path.join(
+        state["outputDirectory"], "*_component_ica*.nii")))
+    subject_tcs = list(glob.glob(os.path.join(
+        state["outputDirectory"], "*_timecourses_ica*.nii")))
+    other_matfiles = [f for f in list(
+        glob.glob(os.path.join(state['outputDirectory'], '*.mat')))]
+
     output_dict = {
-        'computation_phase': 'scica_local_1'}
+        'matlab_output': output.matlab_output,
+        'subject_sms': subject_sms,
+        'subject_tcs': subject_tcs,
+        'other_matfiles': other_matfiles,
+        'computation_phase': 'scica_local_1'
+    }
     cache_dict = {}
     computation_output = {
         "output": output_dict,
@@ -45,7 +59,7 @@ if __name__ == '__main__':
     phase_key = list(listRecursive(parsed_args, 'computation_phase'))
 
     if not phase_key:
-        computation_output = local_noop(parsed_args)
+        computation_output = scica_local_1(parsed_args)
         sys.stdout.write(computation_output)
     else:
         raise ValueError("Error occurred at Local")
