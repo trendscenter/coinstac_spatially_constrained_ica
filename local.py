@@ -17,18 +17,15 @@ def scica_local_1(args):
     maskfile = os.path.join(state["baseDirectory"], args["input"]["mask"][0])
     template = os.path.join(
         state["baseDirectory"], args["input"]["scica_template"][0])
-    ut.log("Existence of files %s, mask %s, template %s, output %s" % (
-        [str((f, os.path.exists(f))) for f in in_files],
-        str((maskfile, os.path.exists(maskfile))),
-        str((template, os.path.exists(template))),
-        str((state["outputDirectory"], os.path.exists(state["outputDirectory"])))
-    ), state)
-    output = gift_gica(
-        in_files=in_files,
-        refFiles=[template],
-        mask=maskfile,
-        out_dir=state["outputDirectory"],
-    )
+    subject_sms = list(glob.glob(os.path.join(
+        state["outputDirectory"], "*_component_ica*.nii")))
+    if len(subject_sms) == 0:
+        output = gift_gica(
+            in_files=in_files,
+            refFiles=[template],
+            mask=maskfile,
+            out_dir=state["outputDirectory"],
+        )
 
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], "*_component_ica*.nii")))
@@ -38,7 +35,6 @@ def scica_local_1(args):
         glob.glob(os.path.join(state['outputDirectory'], '*.mat')))]
 
     output_dict = {
-        'matlab_output': output.matlab_output,
         'subject_sms': subject_sms,
         'subject_tcs': subject_tcs,
         'other_matfiles': other_matfiles,
