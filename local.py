@@ -6,6 +6,8 @@ import utils as ut
 import os
 import glob
 
+TC_SEARCH_STRING = 'gica_cmd_sub*%d_timecourses_ica_s1_.nii'
+
 
 def scica_local_1(args):
     state = args["state"]
@@ -18,7 +20,7 @@ def scica_local_1(args):
     template = os.path.join(
         state["baseDirectory"], args["input"]["scica_template"][0])
     subject_sms = list(glob.glob(os.path.join(
-        state["outputDirectory"], "*_component_ica*.nii")))
+        state["outputDirectory"], '*.nii')))
     if len(subject_sms) == 0:
         output = gift_gica(
             in_files=in_files,
@@ -26,11 +28,14 @@ def scica_local_1(args):
             mask=maskfile,
             out_dir=state["outputDirectory"],
         )
-
-    subject_sms = list(glob.glob(os.path.join(
-        state["outputDirectory"], "*_component_ica*.nii")))
-    subject_tcs = list(glob.glob(os.path.join(
-        state["outputDirectory"], "*_timecourses_ica*.nii")))
+    subject_tcs = []
+    for i in range(1, (len(subject_sms)+1)):
+        fn = os.path.join(state["outputDirectory"], TC_SEARCH_STRING) % i
+        found = glob.glob(fn)
+        if len(found) > 0:
+            subject_tcs.append(found[0])
+        else:
+            break
     other_matfiles = [f for f in list(
         glob.glob(os.path.join(state['outputDirectory'], '*.mat')))]
 
