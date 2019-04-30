@@ -28,6 +28,9 @@ def scica_local_1(args):
             mask=maskfile,
             out_dir=state["outputDirectory"],
         )
+    subject_sms = list(glob.glob(os.path.join(
+        state["outputDirectory"], 'gica_cmd_sub*_component_ica_s1_*.nii')))
+
     subject_tcs = []
     for i in range(1, (len(subject_sms)+1)):
         fn = os.path.join(state["outputDirectory"], TC_SEARCH_STRING) % i
