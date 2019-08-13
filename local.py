@@ -16,9 +16,11 @@ def scica_local_1(args):
         state["baseDirectory"],
         state["clientId"]
     )
-    maskfile = os.path.join(state["baseDirectory"], args["input"]["mask"][0])
-    template = os.path.join(
-        state["baseDirectory"], args["input"]["scica_template"][0])
+    # maskfile = os.path.join(state["baseDirectory"], args["input"]["mask"][0])
+    # template = os.path.join(
+    #    state["baseDirectory"], args["input"]["scica_template"][0])
+    maskfile = os.path.join('.','local_data','mask.nii')
+    template = os.path.join('.','local_data','NeuroMark.nii')
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], '*.nii')))
     if len(subject_sms) == 0:
