@@ -11,7 +11,7 @@ TC_SEARCH_STRING = 'gica_cmd_sub*%d_timecourses_ica_s1_.nii'
 
 def scica_local_1(args):
     state = args["state"]
-    in_files = args["input"]["data"]
+    in_files = [os.path.join(state['baseDirectory'],f) for f in args["input"]["data"]]
     #in_files = ut.read_data(
     #    state["baseDirectory"],
     #    args["input"]["data"],
