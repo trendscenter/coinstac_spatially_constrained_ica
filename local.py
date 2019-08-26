@@ -23,6 +23,7 @@ def scica_local_1(args):
     #    state["baseDirectory"], args["input"]["scica_template"][0])
     maskfile = os.path.join('/computation','local_data','mask.nii')
     template = os.path.join('/computation','local_data','NeuroMark.nii')
+    template = ut.get_interpolated_nifti(in_files[0], template)
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], '*.nii')))
     if len(subject_sms) == 0:
