@@ -24,14 +24,11 @@ def scica_local_1(args):
     maskfile = os.path.join('/computation','local_data','mask.nii')
     template = os.path.join('/computation','local_data','NeuroMark.nii')
     template = ut.get_interpolated_nifti(in_files[0], template, destination_dir=state["outputDirectory"])
-    subject_sms = list(glob.glob(os.path.join(
-        state["outputDirectory"], '*.nii')))
-    if len(subject_sms) == 0:
-        output = gift_gica(
-            in_files=in_files,
-            refFiles=[template],
-            mask=maskfile,
-            out_dir=state["outputDirectory"],
+    output = gift_gica(
+                in_files=in_files,
+                refFiles=[template],
+                mask=maskfile,
+                out_dir=state["outputDirectory"],
         )
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], 'gica_cmd_sub*_component_ica_s1_*.nii')))
