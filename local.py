@@ -11,25 +11,21 @@ TC_SEARCH_STRING = 'gica_cmd_sub*%d_timecourses_ica_s1_.nii'
 
 def scica_local_1(args):
     state = args["state"]
-    in_files = [os.path.join(state['baseDirectory'],f) for f in args["input"]["data"]]
-    #in_files = ut.read_data(
-    #    state["baseDirectory"],
-    #    args["input"]["data"],
-    #    'nii',
-    #    state["clientId"]
-    #)
-    # maskfile = os.path.join(state["baseDirectory"], args["input"]["mask"][0])
-    # template = os.path.join(
-    #    state["baseDirectory"], args["input"]["scica_template"][0])
-    maskfile = os.path.join('/computation','local_data','mask.nii')
-    template = os.path.join('/computation','local_data','NeuroMark.nii')
-    template = ut.get_interpolated_nifti(in_files[0], template, destination_dir=state["outputDirectory"])
+    in_files = [os.path.join(state['baseDirectory'], f)
+                for f in args["input"]["data"]]
+    maskfile = os.path.join('/computation', 'local_data', 'mask.nii')
+    template = os.path.join('/computation', 'local_data', 'NeuroMark.nii')
+    template = ut.get_interpolated_nifti(
+        in_files[0], template, destination_dir=state["outputDirectory"])
+    pyscript = os.path.join(state["outputDirectory"], 'pyscript_gicacommand.m')
+    if os.path.exists(pyscript):
+        os.remove(pyscript)
     output = gift_gica(
-                in_files=in_files,
-                refFiles=[template],
-                mask=maskfile,
-                out_dir=state["outputDirectory"],
-        )
+        in_files=in_files,
+        refFiles=[template],
+        mask=maskfile,
+        out_dir=state["outputDirectory"],
+    )
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], 'gica_cmd_sub*_component_ica_s1_*.nii')))
 
