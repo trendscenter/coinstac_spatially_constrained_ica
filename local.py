@@ -20,12 +20,15 @@ def scica_local_1(args):
     pyscript = os.path.join(state["outputDirectory"], 'pyscript_gicacommand.m')
     if os.path.exists(pyscript):
         os.remove(pyscript)
-    output = gift_gica(
-        in_files=in_files,
-        refFiles=[template],
-        mask=maskfile,
-        out_dir=state["outputDirectory"],
-    )
+    try:
+        output = gift_gica(
+            in_files=in_files,
+            refFiles=[template],
+            mask=maskfile,
+            out_dir=state["outputDirectory"],
+        )
+    except Exception as exception:
+        pass
     subject_sms = list(glob.glob(os.path.join(
         state["outputDirectory"], 'gica_cmd_sub*_component_ica_s1_*.nii')))
 
