@@ -86,5 +86,10 @@ def gift_gica(
         gc.inputs.dim = dim
 
     gc.inputs.out_dir = out_dir
-
-    return gc.run()
+    output = {}
+    try:
+        output = gc.run()
+    except Exception as e:
+        with open(os.path.join(out_dir,"ERROR.log"), 'w') as file:
+            file.write("Exception: %s\nType: %s\n" % (str(e), type(e)))
+    return output
