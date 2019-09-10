@@ -18,7 +18,7 @@ DEFAULT_GROUP_ICA_TYPE = 'spatial'
 DEFAULT_WHICH_ANALYSIS = 1
 DEFAULT_MASK = ''
 
-matlab_cmd = '/computation/groupicatv4.0b/GroupICATv4.0b_standalone_aug_8_2019/run_groupica.sh /usr/local/MATLAB/MATLAB_Runtime/v91/'
+matlab_cmd = '/computation/groupicatv4.0b/GroupICATv4.0b_standalone_sep_10_2019/run_groupica.sh /usr/local/MATLAB/MATLAB_Runtime/v91/'
 
 
 def gift_gica(
@@ -87,9 +87,8 @@ def gift_gica(
 
     gc.inputs.out_dir = out_dir
     output = {}
-    try:
-        output = gc.run()
-    except Exception as e:
-        with open(os.path.join(out_dir,"ERROR.log"), 'w') as file:
-            file.write("Exception: %s\nType: %s\n" % (str(e), type(e)))
+    
+    output = gc.run()
+    
+    
     return output
