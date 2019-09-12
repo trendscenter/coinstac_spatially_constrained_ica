@@ -55,6 +55,22 @@ def scica_local_1(args):
 
     return computation_output
 
+def scica_check_out(args):
+    state = args["state"]
+    gigica_dir = os.path.join(state["outputDirectory"], "gica_gmc_gica_results")
+    output_dict = {
+        "gigica_output": None
+    }
+    if os.path.exists(gigica_dir):
+        output_dict["gigica_output"] = gigica_dir
+    cache_dict = {}
+    computation_output = {
+        "output": output_dict,
+        "cache": cache_dict,
+        "state": state
+    }
+    return computation_output
+       
 
 if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
