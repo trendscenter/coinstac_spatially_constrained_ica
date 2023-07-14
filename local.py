@@ -14,9 +14,12 @@ def scica_local_1(args):
     in_files = [os.path.join(state['baseDirectory'], f)
                 for f in args["input"]["data"]]
     maskfile = os.path.join('/computation', 'local_data', 'mask.nii')
-    template = os.path.join('/computation', 'local_data', 'NeuroMark.nii')
-    template = ut.get_interpolated_nifti(
-        in_files[0], template, destination_dir=state["outputDirectory"])
+    if os.path.exists('/computation/local_data/Neuromark_fMRI_1.0.nii'):
+        template = '/computation/local_data/Neuromark_fMRI_1.0.nii';
+    else:
+        template = os.path.join('/computation', 'local_data', 'NeuroMark.nii')
+        template = ut.get_interpolated_nifti(
+            in_files[0], template, destination_dir=state["outputDirectory"])
     pyscript = os.path.join(state["outputDirectory"], 'pyscript_gicacommand.m')
     if os.path.exists(pyscript):
         os.remove(pyscript)
